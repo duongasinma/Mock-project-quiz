@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Admin Quiz Page</title>
+<link rel="stylesheet"
+	th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+
+
+
+<link th:href="@{/admin/css/adminItemPage.css}" rel="stylesheet">
+
+<script th:src="@{https://code.jquery.com/jquery-3.3.1.slim.min.js}"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	crossorigin="anonymous"></script>
+<script
+	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js}"
+	integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+	crossorigin="anonymous"></script>
+<script
+	th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js}"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+
+<script th:src="@{https://kit.fontawesome.com/9d9680ff7c.js}"
+	crossorigin="anonymous"></script>
+</head>
+<body>
+
+	<th:block th:include="/components/adminPage/header"></th:block>
+	<!--/header-->
+
+	<div class="container">
+
+		<div class="row">
+			<div class="col">
+				<div class="title">
+					<h1>Add New Question</h1>
+
+				</div>
+				<form th:action="@{/api/v1/admin/ques&ans/saveQuestion}" method="POST" style="margin-top: 20px; margin-bottom: 20px"
+					th:object="${question}">
+					<div class="form-group">
+						<label for="exampleFormControlTextarea2">Question:</label>
+						<textarea class="form-control rounded-0"
+							id="exampleFormControlTextarea2" rows="3" th:field="*{quesName}"></textarea>
+					</div>
+
+					<input type="hidden" th:value="${caseId}" th:name="caseId" />
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+
+			</div>
+
+			<div class="col">
+				<div class="title">
+					<h1>List Questions</h1>
+
+				</div>
+
+				<table class="table table-striped"
+					style="margin-top: 20px; margin-bottom: 20px">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Question</th>
+							<th scope="col">Num Choices</th>
+							<th scope="col">Case-Id</th>
+							<th scope="col">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:if="${listAllQuestion != null}">
+						<tr th:each="dto : ${listAllQuestion}">
+							<th scope="row">1</th>
+							<td><div class="form-group">
+									<textarea class="form-control rounded-0"
+										id="exampleFormControlTextarea2" th:text="${dto.quesName}" th:readonly="readonly" rows="4"></textarea>
+								</div></td>
+							<td></td>
+							<td th:text="${dto.caseEntity.getCaseId()}"></td>
+							<td><a th:href="@{#}" class="btn btn-primary"> View or
+									Edit </a></td>
+						</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+	<th:block th:include="/components/adminPage/footer"></th:block>
+	<!--/Footer-->
+</body>
+</html>
