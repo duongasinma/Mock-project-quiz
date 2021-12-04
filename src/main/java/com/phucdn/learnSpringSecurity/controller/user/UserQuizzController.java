@@ -97,7 +97,6 @@ Boolean submitted = false;
 		qForm.setCaseId(caseId);
 		System.out.println("Case id: "+ caseId);
 		model.addAttribute("qForm", qForm);
-//		model.addAttribute("qForm", listQuesAndAns);
 		return "user/quizzes/quizPage";
 	}
 	
