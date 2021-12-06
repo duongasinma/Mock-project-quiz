@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class QuizzFormDTO implements Serializable {
 	private String userId;
 	private String caseId;
-	private Date dateOfStart;
+	private String dateOfStart;
 	private Date dateOfSubmit;
 //	private Map<QuestionAndAnswerDTO, List<AnswerDTO>> quizz; 
 	private List<QuestionAndAnswerDTO> listQuesAndAns;

@@ -39,6 +39,7 @@
 				<input type="hidden" th:field="*{listQuesAndAns[__${stat.index}__].quesId}" th:value="*{listQuesAndAns[__${stat.index}__].quesId}" />
 			</th:block>
 			<input type="hidden" th:field="*{caseId}" th:value="${qForm.caseId}" />
+			<input type="hidden" th:field="*{dateOfStart}" th:value="${qForm.dateOfStart}" />
 			<button type="submit" class="btn btn-danger d-block mx-auto mt-4">Submit
 				Answer</button>
 		</form>

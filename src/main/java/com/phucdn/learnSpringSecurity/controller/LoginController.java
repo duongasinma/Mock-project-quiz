@@ -51,20 +51,20 @@ public class LoginController {
 	public String userInfo(Model model, Principal principal) {
 
 		// Sau khi login thanh cong se co principal
-		String userName = principal.getName();
-		System.out.println("Username: " + userName);
+//		String userName = principal.getName();
+//		System.out.println("Username: " + userName);
 
 		User loginnedUser = (User) ((Authentication) principal).getPrincipal();
 
 		String userInfo = com.phucdn.learnSpringSecurity.utils.WebUtils.toString2(loginnedUser);
 
-		System.out.println("UserInfo is loginned: " + loginnedUser.getUsername());
-		String userLoginned = loginnedUser.getUsername();
+//		System.out.println("UserInfo is loginned: " + loginnedUser.getUsername());
+//		String userLoginned = loginnedUser.getUsername();
 		model.addAttribute("userInfo", userInfo);
-		session.setAttribute("userLoginned", userLoginned);
-		session.setAttribute("userLogSession", userService.findById(userLoginned));
+//		session.setAttribute("userLoginned", userLoginned);
+//		session.setAttribute("userLogSession", userService.findById(userLoginned));
 		if (loginnedUser.getAuthorities().toString().equals("[ROLE_Management]"))
-			return "userInforPage";
+			return "redirect:/api/v1/admin";
 		return "redirect:/api/v1/quizzHiHi";
 	}
 

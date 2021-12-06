@@ -1,6 +1,12 @@
 package com.phucdn.learnSpringSecurity.controller.user;
+
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -36,25 +42,19 @@ public class UserQuizzController {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	@Autowired
 	private CaseRepository caseRepository;
-	
+
 	@Autowired
 	private QuizzService quizzService;
-	
+
 	@Autowired
 	private QuestionRepository questionRepository;
-	
+
 	@Autowired
 	private AnswerRepository answerRepository;
-	
-//	@GetMapping()
-//	public String loadCasePage(Model model) {
-//		model.addAttribute("listCase", caseRepository.loadCaseWithActiveStatus());
-//		model.addAttribute("listCategory", categoryRepository.loadCategoryByActiveStatus());
-//		return "user/quizzes/listQuizzes";
-//	}
+
 //	@GetMapping("/start/{id}")
 //	public String loadQizzPage(Model model, Principal principal, @PathVariable("id") String caseId){
 //		QuizzFormDTO form = quizzService.loadQuizzForm(caseId);
@@ -69,11 +69,10 @@ public class UserQuizzController {
 //		return "user/quizzes/quizzForm";
 //	}
 	// bonus
-Boolean submitted = false;
-	
+	Boolean submitted = false;
+
 	@GetMapping("/playTest")
-	public String loadTestCase(@RequestParam(value = "quizCaseId") String caseId,
-				Model model) {
+	public String loadTestCase(@RequestParam(value = "quizCaseId") String caseId, Model model) {
 		int numOfQues = caseRepository.getNumberQuesOfCase(caseId);
 		System.out.println(numOfQues);
 		String quesName = null;
@@ -81,38 +80,44 @@ Boolean submitted = false;
 		QuestionAndAnswerDTO quesAndAns = new QuestionAndAnswerDTO();
 		List<QuestionAndAnswerDTO> listQuesAndAns = new ArrayList<>();
 //		List<AnswerDTO> listAnsReal = new ArrayList<>();
-		List<QuestionEntity> lisQues  =  questionRepository.getQuestionByCaseId(caseId, numOfQues);		
-		List<AnswerEntity> lisAns = new ArrayList<>();				
-		
-		for (QuestionEntity ques : lisQues) {			
+		List<QuestionEntity> lisQues = questionRepository.getQuestionByCaseId(caseId, numOfQues);
+		List<AnswerEntity> lisAns = new ArrayList<>();
+
+		for (QuestionEntity ques : lisQues) {
 			quesId = ques.getQuesId();
 			quesName = ques.getQuesName();
 			lisAns = answerRepository.loadListAnswerByQuestionId(quesId);
-			
+
 			quesAndAns = new QuestionAndAnswerDTO(quesId, quesName, null, lisAns);
 			listQuesAndAns.add(quesAndAns);
 		}
+
 		QuizzFormDTO qForm = new QuizzFormDTO();
 		qForm.setListQuesAndAns(listQuesAndAns);
 		qForm.setCaseId(caseId);
-		System.out.println("Case id: "+ caseId);
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String formatDateTime = now.format(formatter);
+		qForm.setDateOfStart(formatDateTime);
+//		System.out.println("Date 1: " + qForm.getDateOfStart());
+
 		model.addAttribute("qForm", qForm);
 		return "user/quizzes/quizPage";
 	}
-	
+
 	@PostMapping("/submit")
-	public String submit(@ModelAttribute QuizzFormDTO form, Model m) {
-		System.out.println("Case id: "+ form.getCaseId());
+	public String submit(@ModelAttribute QuizzFormDTO form, Model m) throws ParseException {
+//		System.out.println("Case id: " + form.getCaseId());
+//		int numOfQues = caseRepository.getNumberQuesOfCase(form.getCaseId());
+//		System.out.println("Size of quiz: " + numOfQues);
+//		System.out.println("Size: " + form.getListQuesAndAns().size());
+//		System.out.println("Hello World:" + form.getListQuesAndAns().get(0).getAnsId());
+//		System.out.println("question id:" + form.getListQuesAndAns().get(0).getQuesId());
+//		System.out.println("Date 2: " + form.getDateOfStart());
+		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(form.getDateOfStart());  
+		String rosId = "ros-" + date.getTime();
+		System.out.println("Time: "+rosId);
 
-		int numOfQues = caseRepository.getNumberQuesOfCase(form.getCaseId());
-		
-		System.out.println("Size of quiz: "+numOfQues);
-		System.out.println("Size: "+form.getListQuesAndAns().size());
-		System.out.println("Hello World:" + form.getListQuesAndAns().get(0).getAnsId());
-		System.out.println("question id:" + form.getListQuesAndAns().get(0).getQuesId());
-//		System.out.println("question id:" + form.getListQuesAndAns().get(1).getQuesId());
-
-//		System.out.println("Hello World:" + form.getListQuesAndAns().get(2).getAnswerId().toString());
 		return "user/quizzes/result";
 	}
 }
