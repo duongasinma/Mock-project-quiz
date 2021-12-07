@@ -24,17 +24,17 @@
 			
 			<div class="d-flex justify-content-center">
 				<p>Participant name:&nbsp;&nbsp;</p>
-				<p th:if="${result}" th:text="${result.username}"></p>
+				<p th:if="${rosEntity != null}" th:text="${rosEntity.user.getUserId()}"></p>
 			</div>
 			
 			<div class="d-flex justify-content-center">
 				<p>Total correct answer:&nbsp;&nbsp;</p>
-				<p th:if="${result}" th:text="${result.totalCorrect}"></p>
+				<p th:if="${rosEntity != null}" th:text="${rosEntity.numberCorrect}+'/'+${numOfQues}"></p>
 			</div>
 			
 			<div class="d-flex justify-content-center">
-				<p>Total false answer:&nbsp;&nbsp;</p>
-				<p th:if="${result}" th:text="5 - ${result.totalCorrect}"></p>
+				<p>Total point:&nbsp;&nbsp;</p>
+				<p th:if="${rosEntity != null}" th:text="${rosEntity.totalPoint}+'/10'"></p>
 			</div>
 			
 			<div class="d-flex justify-content-center mt-4">

@@ -11,6 +11,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,12 +29,15 @@ import com.phucdn.learnSpringSecurity.dto.QuizzFormDTO;
 import com.phucdn.learnSpringSecurity.entity.AnswerEntity;
 import com.phucdn.learnSpringSecurity.entity.CaseEntity;
 import com.phucdn.learnSpringSecurity.entity.QuestionEntity;
+import com.phucdn.learnSpringSecurity.entity.ResultOfCaseEntity;
+import com.phucdn.learnSpringSecurity.entity.UserEntity;
 import com.phucdn.learnSpringSecurity.repository.AnswerRepository;
 import com.phucdn.learnSpringSecurity.repository.CaseRepository;
-import com.phucdn.learnSpringSecurity.repository.CategoryRepository;
 import com.phucdn.learnSpringSecurity.repository.QuestionRepository;
 import com.phucdn.learnSpringSecurity.service.CaseService;
-import com.phucdn.learnSpringSecurity.service.QuizzService;
+import com.phucdn.learnSpringSecurity.service.QuizService;
+import com.phucdn.learnSpringSecurity.service.ResultOfCaseService;
+import com.phucdn.learnSpringSecurity.service.UserService;
 
 @Controller
 @RequestMapping("/api/v1/quizzHiHi/quizzes")
@@ -41,20 +46,20 @@ public class UserQuizzController {
 	private CaseService caseService;
 
 	@Autowired
-	private CategoryRepository categoryRepository;
-
-	@Autowired
 	private CaseRepository caseRepository;
 
 	@Autowired
-	private QuizzService quizzService;
+	private QuizService quizService;
 
 	@Autowired
 	private QuestionRepository questionRepository;
 
 	@Autowired
 	private AnswerRepository answerRepository;
-
+	
+	@Autowired
+	private UserService userService;
+	
 //	@GetMapping("/start/{id}")
 //	public String loadQizzPage(Model model, Principal principal, @PathVariable("id") String caseId){
 //		QuizzFormDTO form = quizzService.loadQuizzForm(caseId);
@@ -79,7 +84,6 @@ public class UserQuizzController {
 		String quesId = null;
 		QuestionAndAnswerDTO quesAndAns = new QuestionAndAnswerDTO();
 		List<QuestionAndAnswerDTO> listQuesAndAns = new ArrayList<>();
-//		List<AnswerDTO> listAnsReal = new ArrayList<>();
 		List<QuestionEntity> lisQues = questionRepository.getQuestionByCaseId(caseId, numOfQues);
 		List<AnswerEntity> lisAns = new ArrayList<>();
 
@@ -99,25 +103,17 @@ public class UserQuizzController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String formatDateTime = now.format(formatter);
 		qForm.setDateOfStart(formatDateTime);
-//		System.out.println("Date 1: " + qForm.getDateOfStart());
-
 		model.addAttribute("qForm", qForm);
 		return "user/quizzes/quizPage";
 	}
 
 	@PostMapping("/submit")
-	public String submit(@ModelAttribute QuizzFormDTO form, Model m) throws ParseException {
-//		System.out.println("Case id: " + form.getCaseId());
-//		int numOfQues = caseRepository.getNumberQuesOfCase(form.getCaseId());
-//		System.out.println("Size of quiz: " + numOfQues);
-//		System.out.println("Size: " + form.getListQuesAndAns().size());
-//		System.out.println("Hello World:" + form.getListQuesAndAns().get(0).getAnsId());
-//		System.out.println("question id:" + form.getListQuesAndAns().get(0).getQuesId());
-//		System.out.println("Date 2: " + form.getDateOfStart());
-		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(form.getDateOfStart());  
-		String rosId = "ros-" + date.getTime();
-		System.out.println("Time: "+rosId);
-
+	public String submit(@ModelAttribute QuizzFormDTO form, Model m, Principal principal) throws ParseException {	
+		User loginnedUser = (User) ((Authentication) principal).getPrincipal();
+		form.setUserId(loginnedUser.getUsername());
+		ResultOfCaseEntity rosEntity = quizService.saveResultOfCase(form);
+		m.addAttribute("rosEntity",rosEntity);
+		m.addAttribute("numOfQues", form.getListQuesAndAns().size());
 		return "user/quizzes/result";
 	}
 }

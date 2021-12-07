@@ -29,7 +29,7 @@
 						<div class="option">
 							<input type="radio"
 								th:field="*{listQuesAndAns[__${stat.index}__].ansId}"
-								th:name="|ans[${i.index}].chose|" th:value="${ans.isCorrect}" />
+								th:name="|ans[${i.index}].chose|" th:value="${ans.ansId}" />
 							<p th:text="${ans.ansName}"></p>
 
 						</div>
@@ -37,6 +37,7 @@
 
 				</div>
 				<input type="hidden" th:field="*{listQuesAndAns[__${stat.index}__].quesId}" th:value="*{listQuesAndAns[__${stat.index}__].quesId}" />
+				<input type="hidden" th:field="*{listQuesAndAns[__${stat.index}__].quesName}" th:value="*{listQuesAndAns[__${stat.index}__].quesName}" />
 			</th:block>
 			<input type="hidden" th:field="*{caseId}" th:value="${qForm.caseId}" />
 			<input type="hidden" th:field="*{dateOfStart}" th:value="${qForm.dateOfStart}" />

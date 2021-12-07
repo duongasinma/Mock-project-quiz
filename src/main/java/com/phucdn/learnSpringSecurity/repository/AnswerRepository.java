@@ -25,4 +25,8 @@ public interface AnswerRepository extends JpaRepository<AnswerEntity, String> {
 			+ "where ans_id = :ansId", nativeQuery = true)
 	void updateAnswerByQuestionId(@Param("ansId") String ansId, 
 			@Param("ansName") String ansName, @Param("isCorrect") boolean isCorrcet);
+	
+	@Query(value = "select * from answers "
+			+ "where ques_id = :quesId and is_correct= 'true'", nativeQuery = true)
+	List<AnswerEntity> getCorrectAnswerByQuestionId(@Param("quesId") String quesId);
 }
