@@ -37,7 +37,6 @@ public class AdminUserController {
 	
 	@GetMapping("/deleteUser/{id}")
 	public String banUser(@PathVariable("id") String userId) {
-		System.out.println(userId);
 		userRepository.banUserByUserId(userId);
 		return "redirect:/api/v1/admin/users";
 	}

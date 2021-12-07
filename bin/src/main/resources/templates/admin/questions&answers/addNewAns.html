@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Admin Quiz Page</title>
+<link rel="stylesheet"
+	th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+
+
+
+<link th:href="@{/admin/css/adminItemPage.css}" rel="stylesheet">
+
+<script th:src="@{https://code.jquery.com/jquery-3.3.1.slim.min.js}"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	crossorigin="anonymous"></script>
+<script
+	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js}"
+	integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+	crossorigin="anonymous"></script>
+<script
+	th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js}"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+
+<script th:src="@{https://kit.fontawesome.com/9d9680ff7c.js}"
+	crossorigin="anonymous"></script>
+
+<script
+	th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+<script th:src="@{https://unpkg.com/sweetalert/dist/sweetalert.min.js}"></script>
+</head>
+<body>
+
+	<th:block th:include="/components/adminPage/header"></th:block>
+	<!--/header-->
+
+	<th:block th:if="${addQuesSuccess != null}">
+		<script>
+                swal("Add Question is successful!", "Thanks");
+            </script>
+	</th:block>
+
+	<th:block th:if="${addAnsSuccess != null}">
+		<script>
+                swal("Add Answer for question is successful!", "Thanks");
+            </script>
+	</th:block>
+
+	<div class="container">
+		<div class="row"
+			style="margin-bottom: 20px; border: 1px solid black; padding: 10px;">
+			<form th:object="${question}"
+				th:action="@{'/api/v1/admin/ques&ans/updateQues/'+${question.quesId}}"
+				method="POST">
+				<div class="title">
+					<h1>Question Info</h1>
+
+				</div>
+
+				<div class="form-group">
+					<label for="exampleFormControlTextarea2">Question:</label>
+					<textarea class="form-control rounded-0"
+						id="exampleFormControlTextarea2" rows="3" th:field="*{quesName}"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="exampleInputPassword1">Case Id:</label> <input
+						type="text" class="form-control" id="exampleInputPassword1"
+						placeholder="Case Id" th:field="*{caseId}" th:readonly="readonly">
+				</div>
+
+				<button type="submit" class="btn btn-primary">Update
+					Question</button>
+			</form>
+		</div>
+
+		<div class="row">
+
+			<div class="col">
+
+				<form
+					th:action="@{'/api/v1/admin/ques&ans/saveAns/' +${question.quesId}}"
+					th:object="${answer}" method="POST">
+					<div class="title">
+						<h1>Add Answer</h1>
+					</div>
+					<div class="form-group">
+						<label for="exampleFormControlTextarea2">Answer:</label>
+						<textarea class="form-control rounded-0"
+							id="exampleFormControlTextarea2" rows="3" th:field="*{ansName}"></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="exampleInputPassword1">Question Id:</label> <input
+							type="text" class="form-control" id="exampleInputPassword1"
+							th:placeholder="${question.quesId}" th:value="${question.quesId}"
+							th:field="*{quesId}" th:readonly="readonly">
+					</div>
+
+					<div class="form-group">
+						<label for="exampleFormControlSelect1">Correct Choice:</label> <select
+							name="cateId" th:field="*{isCorrect}" class="form-control"
+							id="exampleFormControlSelect1">
+
+							<option th:value="No" th:text="No"></option>
+							<option th:value="Yes" th:text="Yes"></option>
+
+						</select>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Add</button>
+				</form>
+
+			</div>
+			
+			<div class="col">
+			
+				<div class="title">
+					<h1>List Answers Of Question</h1>
+
+				</div>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Answer</th>
+							<th scope="col">Is Correct</th>
+							<th scope="col">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<th:block th:if="${listAnswerByQuesId != null}">
+							<tr th:each="dto : ${listAnswerByQuesId}">
+								<form th:object="${dto}" th:action="@{'/api/v1/admin/ques&ans/updateAns/'+${dto.ansId}}" id="form-ans" method="POST">
+									<th scope="row">*</th>
+									<td>
+										<textarea class="form-control rounded-0" rows="3"
+										th:text="${dto.ansName}" th:name="ans">
+										</textarea>
+									</td>
+									
+									<td>
+										<select th:name="isCorrect" class="form-control" >
+											<th:block th:if="not ${dto.isCorrect}">
+												<option th:value="No" th:text="No" selected></option>
+												<option th:value="Yes" th:text="Yes"></option>
+											</th:block>
+											<th:block th:if="${dto.isCorrect}">
+												<option th:value="No" th:text="No"></option>
+												<option th:value="Yes" th:text="Yes" selected></option>
+											</th:block>								
+
+										</select>
+									</td>
+									<td >
+									<!-- <a th:href="@{'/api/v1/admin/ques&ans/editAns/' + ${dto.ansId}}"
+									class="btn btn-success" th:text="Update" style="width: 80px"></a> -->
+										<button type="submit" class="btn btn-primary">Update</button>
+										<a th:href="@{'/api/v1/admin/ques&ans/deleteAns/' + ${dto.ansId}}"
+										class="btn btn-danger" th:text="Delete" style="width: 78px"></a>
+									</td>
+								</form>
+							</tr>
+
+						</th:block>
+
+					</tbody>
+				</table>
+			</div>
+			
+		</div>
+
+	</div>
+
+	<th:block th:include="/components/adminPage/footer"></th:block>
+	<!--/Footer-->
+
+</body>
+</html>
