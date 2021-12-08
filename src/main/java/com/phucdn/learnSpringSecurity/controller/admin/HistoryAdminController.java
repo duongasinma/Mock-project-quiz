@@ -19,19 +19,20 @@ import com.phucdn.learnSpringSecurity.dto.CaseDTO;
 import com.phucdn.learnSpringSecurity.dto.CategoryDTO;
 import com.phucdn.learnSpringSecurity.entity.CaseEntity;
 import com.phucdn.learnSpringSecurity.entity.CategoryEntity;
+import com.phucdn.learnSpringSecurity.entity.ResultOfCaseDetailEntity;
 import com.phucdn.learnSpringSecurity.entity.UserEntity;
 import com.phucdn.learnSpringSecurity.repository.CaseRepository;
 import com.phucdn.learnSpringSecurity.repository.CategoryRepository;
 import com.phucdn.learnSpringSecurity.service.CaseService;
+import com.phucdn.learnSpringSecurity.service.ResultOfCaseDetailService;
 
 @Controller
 public class HistoryAdminController {
+	@Autowired
+	private ResultOfCaseDetailService ResultOfCaseDetailService; ;
 
 	@GetMapping("/api/v1/admin/questions&answers/history")
 	public String loadCasePage(Model model) {
+		model.addAttribute("listResult", ResultOfCaseDetailService.findAll());
 		return "admin/questions&answers/history";
 	}
-
-
-	
-}
