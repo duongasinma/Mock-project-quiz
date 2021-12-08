@@ -45,75 +45,21 @@
 				<tr>
 					<th scope="col">#</th>
 					<th scope="col">User ID</th>
+					<th scope="col">Ans ID</th>
 					<th scope="col">Quesiton ID</th>
-					<th scope="col">Date Do Test</th>
-					<th scope="col">Category Of case</th>
-					<th scope="col">Ponit</th>
+					<th scope="col">Question Name</th>
 				</tr>
 			</thead>
 			<tbody>
-				<th:block>
-					<tr>
+				<th:block th:if="${listResult != null}">
+					<tr th:each="dto : ${listResult}">
 						
 							<th scope="row"></th>
-							<td th:text="phucThai2601"></td>
-							<td th:text="Q-1635307008706"></td>
-							<td th:text="2021-12-06"></td>
-							<td th:text="Math"></td>
-							<td>33.3</td>
-						
-					</tr>
-				</th:block>
-
-				<th:block>
-					<tr >
-						<th scope="row"></th>
-							<td th:text="tamPham95"></td>
-							<td th:text="Q-1635327946455"></td>
-							<td th:text="2021-12-07"></td>
-							<td th:text="Math"></td>
-							<td>66.6</td>
+							<td>testO4</td>
+							<td th:text="*{dto.rosDeId}"></td>
+							<td th:text="*{dto.quesId}"></td>
+							<td th:text="*{dto.quesName}"></td>
 							
-						
-					</tr>
-				</th:block>
-				
-				<th:block>
-					<tr >
-						<th scope="row"></th>
-							<td th:text="test04"></td>
-							<td th:text="Q-1635307008706"></td>
-							<td th:text="2021-12-06"></td>
-							<td th:text="SoftwareEngineer"></td>
-							<td>00.0</td>
-							
-						
-					</tr>
-				</th:block>
-				 
-				 <th:block>
-					<tr >
-						<th scope="row"></th>
-							<td th:text="test05"></td>
-							<td th:text="Q-1635329035012"></td>
-							<td th:text="2021-12-09"></td>
-							<td th:text="SoftwareEngineer"></td>
-							<td>66.6</td>
-							
-						
-					</tr>
-				</th:block>
-				
-				<th:block>
-					<tr >
-						<th scope="row"></th>
-							<td th:text="thainguyen24"></td>
-							<td th:text="Q-1635307008706"></td>
-							<td th:text="2021-12-08"></td>
-							<td th:text="SoftwareEngineer"></td>
-							<td>88.8</td>
-							
-						
 					</tr>
 				</th:block>
 			</tbody>
