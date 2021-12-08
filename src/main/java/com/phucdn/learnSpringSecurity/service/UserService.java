@@ -70,4 +70,5 @@ public interface UserService {
 
 	<S extends UserEntity> S save(S entity);
 
+	boolean useridHaveExist(String u);
 }

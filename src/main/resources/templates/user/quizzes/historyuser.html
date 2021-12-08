@@ -40,82 +40,32 @@
 		<hr>
 
 
-		<table class="table table-striped" style="max-width: 80%; margin: auto;">
+		<table class="table table-striped"
+			style="max-width: 80%; margin: auto;">
 			<thead>
 				<tr>
 					<th scope="col">#</th>
 					<th scope="col">User ID</th>
-					<th scope="col">Quesiton ID</th>
+					<th scope="col">Case</th>
 					<th scope="col">Date Do Test</th>
 					<th scope="col">Category Of case</th>
 					<th scope="col">Ponit</th>
 				</tr>
 			</thead>
 			<tbody>
-				<th:block>
+				<th:block th:each="ros : ${listRos}">
 					<tr>
-						
-							<th scope="row"></th>
-							<td th:text="phucThai2601"></td>
-							<td th:text="Q-1635307008706"></td>
-							<td th:text="2021-12-06"></td>
-							<td th:text="Math"></td>
-							<td>33.3</td>
-						
+
+						<th scope="row"></th>
+						<td th:text="${ros.user.getUserId()}"></td>
+						<td th:text="${ros.caseEntity.getCaseName}"></td>
+						<td th:text="${ros.dateOfBegin}"></td>
+						<td th:text="Math"></td>
+						<td th:text="${ros.totalPoint}"></td>
+
 					</tr>
 				</th:block>
 
-				<th:block>
-					<tr >
-						<th scope="row"></th>
-							<td th:text="tamPham95"></td>
-							<td th:text="Q-1635327946455"></td>
-							<td th:text="2021-12-07"></td>
-							<td th:text="Math"></td>
-							<td>66.6</td>
-							
-						
-					</tr>
-				</th:block>
-				
-				<th:block>
-					<tr >
-						<th scope="row"></th>
-							<td th:text="test04"></td>
-							<td th:text="Q-1635307008706"></td>
-							<td th:text="2021-12-06"></td>
-							<td th:text="SoftwareEngineer"></td>
-							<td>00.0</td>
-							
-						
-					</tr>
-				</th:block>
-				 
-				 <th:block>
-					<tr >
-						<th scope="row"></th>
-							<td th:text="test05"></td>
-							<td th:text="Q-1635329035012"></td>
-							<td th:text="2021-12-09"></td>
-							<td th:text="SoftwareEngineer"></td>
-							<td>66.6</td>
-							
-						
-					</tr>
-				</th:block>
-				
-				<th:block>
-					<tr >
-						<th scope="row"></th>
-							<td th:text="thainguyen24"></td>
-							<td th:text="Q-1635307008706"></td>
-							<td th:text="2021-12-08"></td>
-							<td th:text="SoftwareEngineer"></td>
-							<td>88.8</td>
-							
-						
-					</tr>
-				</th:block>
 			</tbody>
 		</table>
 	</div>

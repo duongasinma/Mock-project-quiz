@@ -32,7 +32,7 @@ public class QuizServiceImpl implements QuizService {
 
 	@Autowired
 	private ResultOfCaseService resultOfCaseService;
-	
+
 	@Autowired
 	private ResultOfCaseDetailService resultOfCaseDetailService;
 
@@ -41,51 +41,55 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public ResultOfCaseEntity saveResultOfCase(QuizzFormDTO form) throws ParseException {
-		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(form.getDateOfStart());
-		int numberAnsCorrect = 0;
-		double total = 0;
-		String rosId = "ros-" + date.getTime();
-		ResultOfCaseEntity rosEntity = new ResultOfCaseEntity();
-		rosEntity.setRosId(rosId);
-		rosEntity.setDateOfBegin(date);
-		long mills = System.currentTimeMillis();
-		Date dateOffinish = new Date(mills);
-		rosEntity.setDateOfFinish(dateOffinish);
-		CaseEntity caseE = caseService.getById(form.getCaseId());
-		rosEntity.setCaseEntity(caseE);
-		UserEntity userE = userService.getById(form.getUserId());
-		rosEntity.setUser(userE);
+		if (form.getListQuesAndAns().size() > 0) {
+			Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(form.getDateOfStart());
+			int numberAnsCorrect = 0;
+			double total = 0;
+			String rosId = "ros-" + date.getTime();
+			ResultOfCaseEntity rosEntity = new ResultOfCaseEntity();
+			rosEntity.setRosId(rosId);
+			rosEntity.setDateOfBegin(date);
+			long mills = System.currentTimeMillis();
+			Date dateOffinish = new Date(mills);
+			rosEntity.setDateOfFinish(dateOffinish);
+			CaseEntity caseE = caseService.getById(form.getCaseId());
+			rosEntity.setCaseEntity(caseE);
+			UserEntity userE = userService.getById(form.getUserId());
+			rosEntity.setUser(userE);
 
 //		check correct and save result detail
-		for (QuestionAndAnswerDTO quesAndAns : form.getListQuesAndAns()) {			
-			// count correct answer
-			String ansChoose = quesAndAns.getAnsId();			
-			if (ansChoose != null) {
-				List<AnswerEntity> listCorrectAnswer = answerRepository
-						.getCorrectAnswerByQuestionId(quesAndAns.getQuesId());
-				for (AnswerEntity ansE : listCorrectAnswer) {
-					if (ansChoose.equalsIgnoreCase(ansE.getAnsId())) {
-						numberAnsCorrect++;
-						break;
+			for (QuestionAndAnswerDTO quesAndAns : form.getListQuesAndAns()) {
+				// count correct answer
+				String ansChoose = quesAndAns.getAnsId();
+				if (ansChoose != null) {
+					List<AnswerEntity> listCorrectAnswer = answerRepository
+							.getCorrectAnswerByQuestionId(quesAndAns.getQuesId());
+					for (AnswerEntity ansE : listCorrectAnswer) {
+						if (ansChoose.equalsIgnoreCase(ansE.getAnsId())) {
+							numberAnsCorrect++;
+							break;
+						}
 					}
 				}
 			}
-		}
-		if (numberAnsCorrect != 0) {
-			total = ((double) numberAnsCorrect / (double) (form.getListQuesAndAns().size())) * 10;
-			total = (double) Math.round(total * 100) / 100;
-		} else
-			total = 0;
-		rosEntity.setTotalPoint(total);
-		rosEntity.setNumberCorrect(numberAnsCorrect);
+			if (numberAnsCorrect != 0) {
+				total = ((double) numberAnsCorrect / (double) (form.getListQuesAndAns().size())) * 10;
+				total = (double) Math.round(total * 100) / 100;
+			} else
+				total = 0;
+			rosEntity.setTotalPoint(total);
+			rosEntity.setNumberCorrect(numberAnsCorrect);
 
-		resultOfCaseService.save(rosEntity);
-		this.saveResultOfCaseDetail(form, rosId);
-		return rosEntity;
+			resultOfCaseService.save(rosEntity);
+			this.saveResultOfCaseDetail(form, rosId);
+			return rosEntity;
+		}
+		System.out.println("Size null");
+		return null;
 	}
 
 	@Override
-	public void saveResultOfCaseDetail(QuizzFormDTO form, String rosId) throws ParseException{
+	public void saveResultOfCaseDetail(QuizzFormDTO form, String rosId) throws ParseException {
 		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(form.getDateOfStart());
 		ResultOfCaseEntity rosEntity = resultOfCaseService.getById(rosId);
 		for (QuestionAndAnswerDTO quesAndAns : form.getListQuesAndAns()) {
@@ -97,7 +101,7 @@ public class QuizServiceImpl implements QuizService {
 			rosDetail.setCorrect(false);
 			rosDetail.setAnsId(quesAndAns.getAnsId());
 			// count correct answer
-			String ansChoose = quesAndAns.getAnsId();			
+			String ansChoose = quesAndAns.getAnsId();
 			if (ansChoose != null) {
 				List<AnswerEntity> listCorrectAnswer = answerRepository
 						.getCorrectAnswerByQuestionId(quesAndAns.getQuesId());
@@ -110,7 +114,7 @@ public class QuizServiceImpl implements QuizService {
 			}
 			resultOfCaseDetailService.save(rosDetail);
 		}
-		
+
 	}
 
 }

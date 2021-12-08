@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.phucdn.learnSpringSecurity.entity.ResultOfCaseEntity;
+import com.phucdn.learnSpringSecurity.entity.UserEntity;
 
 public interface ResultOfCaseService {
 
@@ -69,5 +70,7 @@ public interface ResultOfCaseService {
 	<S extends ResultOfCaseEntity> Optional<S> findOne(Example<S> example);
 
 	<S extends ResultOfCaseEntity> S save(S entity);
+	
+	List<ResultOfCaseEntity> findByUser(UserEntity user);
 
 }

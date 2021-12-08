@@ -165,5 +165,8 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findAll(example, sort);
 	}
 	
-	
+	@Override
+	public boolean useridHaveExist(String userID) {		
+		return findById(userID).isPresent();
+	}
 }

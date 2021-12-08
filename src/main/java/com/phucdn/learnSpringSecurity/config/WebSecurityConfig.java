@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 		http.authorizeRequests().antMatchers("/api/v1/quizzHiHi/quizzes/chooseSub/**", "/logout", "/api/v1/login").permitAll();
 
-		http.authorizeRequests().antMatchers("/api/v1/userInfo", "/api/v1/quizzHiHi/quizzes/playTest/**").access("hasAnyRole('ROLE_Customer', 'ROLE_Management')");
+		http.authorizeRequests().antMatchers("/api/v1/userInfo", "/api/v1/quizzHiHi/quizzes/playTest/**", "/api/v1/user/quizzes/historyuser").access("hasAnyRole('ROLE_Customer', 'ROLE_Management')");
 
 		http.authorizeRequests().antMatchers("/api/v1/admin/**/**").access("hasRole('ROLE_Management')");
 

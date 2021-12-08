@@ -11,54 +11,54 @@
 	<div class="container">
 		<div class="title">Registration</div>
 		<div class="content">
-			<form action="" method="POST" >
+			<form th:action="@{/api/v1/process_register}" th:method="POST" th:object="${user}">
 				<div class="user-details">
 					<div class="input-box">
-						<span class="details">Full Name</span> <span class="errors hide">Error</span>
+						<span class="details">Full Name</span> 
 						<input type="text" 
-							placeholder="Enter your name" required>
+							placeholder="Enter your name" th:field="*{fullName}" required/>
 					</div>
 					<div class="input-box">
 						<span class="details">Username</span> <span class="errors hide">Error</span>
 						<input type="text" 
-							placeholder="Enter your username" required>
+							placeholder="Enter your username" th:field="*{userId}" required/>
+							<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" style="color: red">Full name error</span>
 					</div>
 					<div class="input-box">
 						<span class="details">Email</span> <span class="errors hide">Error</span>
 						<input type="text" 
-							placeholder="Enter your email" required>
+							placeholder="Enter your email" th:field="*{email}" required/>
+							<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">Full name error</span>
 					</div>
 
 					<div class="input-box">
 						<span class="details">Address</span> <span class="errors hide">Error</span>
 						<input type="text" 
-							placeholder="Enter your password" required>
+							placeholder="Enter your password" th:field="*{address}" required>
+							<span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" style="color: red">Full name error</span>
 					</div>
 
 					<div class="input-box">
-						<span class="details">Phone Number</span> <span
-							class="errors hide">Error</span> <input type="text"
-							 placeholder="Enter your number" required>
+						<span class="details">Phone Number</span> 
+						 <input type="text"
+							 placeholder="Enter your number" th:field="*{phone}" required
+							 minlength="8" maxlength ="12" />
+							 <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" style="color: red">Full name error</span>
 					</div>
 					
 
 					<div class="input-box">
-						<span class="details">Password</span> <span class="errors hide">Error</span>
+						<span class="details">Password</span> 
 						<input type="password" 
-							placeholder="Enter your password" required>
+							placeholder="Enter your password" th:field="*{password}" required>						
 					</div>
-
-					<div class="input-box">
-						<span class="details">Confirm Password</span> <span
-							class="errors hide">Error</span> <input type="password"
-							placeholder="Confirm your password" required>
-					</div>
-
-
 				</div>
 				
 				<div class="button">
 					<input type="submit" value="Register">
+				</div>
+				<div>
+				<a href = "/api/v1/login" style="color: blue">Have an Account! Login now!!!</a>
 				</div>
 			</form>
 		</div>

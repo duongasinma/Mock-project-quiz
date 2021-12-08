@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.phucdn.learnSpringSecurity.entity.ResultOfCaseEntity;
+import com.phucdn.learnSpringSecurity.entity.UserEntity;
 import com.phucdn.learnSpringSecurity.repository.ResultOfCaseRepository;
 import com.phucdn.learnSpringSecurity.service.ResultOfCaseService;
 
@@ -163,6 +164,11 @@ public class ResultOfCaseServiceImpl implements ResultOfCaseService{
 	@Override
 	public <S extends ResultOfCaseEntity> List<S> findAll(Example<S> example, Sort sort) {
 		return resultOfCaseRepository.findAll(example, sort);
+	}
+
+	@Override
+	public List<ResultOfCaseEntity> findByUser(UserEntity user) {
+		return resultOfCaseRepository.findByUser(user);
 	}
 	
 	

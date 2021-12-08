@@ -27,7 +27,7 @@
 	          <a class="nav-link" th:href="@{/api/v1/login}">Login</a>
 	        </li>
 	        <li class="nav-item" th:if="${#request.userPrincipal == null}">
-	          <a class="nav-link" th:href="@{/api/v1/login}">Register Account</a>
+	          <a class="nav-link" th:href="@{/api/v1/signUp}">Register Account</a>
 	        </li>
 	        
 	        <li class="nav-item" th:if="${#request.userPrincipal != null}">

@@ -56,24 +56,10 @@ public class UserQuizzController {
 
 	@Autowired
 	private AnswerRepository answerRepository;
-	
+
 	@Autowired
 	private UserService userService;
-	
-//	@GetMapping("/start/{id}")
-//	public String loadQizzPage(Model model, Principal principal, @PathVariable("id") String caseId){
-//		QuizzFormDTO form = quizzService.loadQuizzForm(caseId);
-//		form.setUserId(principal.getName());
-//		List<QuestionAndAnswerDTO> listQuesAndAns = new ArrayList<>(form.getQuizz().keySet());
-//		CaseEntity caseE = caseService.getById(caseId);
-//		String caseName = caseE.getCaseName();
-//		
-////		System.out.println("username: "+ principal.getName());
-//		model.addAttribute("quizzForm", form);
-//		model.addAttribute("caseName", caseName);
-//		return "user/quizzes/quizzForm";
-//	}
-	// bonus
+
 	Boolean submitted = false;
 
 	@GetMapping("/playTest")
@@ -108,11 +94,14 @@ public class UserQuizzController {
 	}
 
 	@PostMapping("/submit")
-	public String submit(@ModelAttribute QuizzFormDTO form, Model m, Principal principal) throws ParseException {	
+	public String submit(@ModelAttribute QuizzFormDTO form, Model m, Principal principal) throws ParseException {
 		User loginnedUser = (User) ((Authentication) principal).getPrincipal();
 		form.setUserId(loginnedUser.getUsername());
 		ResultOfCaseEntity rosEntity = quizService.saveResultOfCase(form);
-		m.addAttribute("rosEntity",rosEntity);
+		if (rosEntity == null) {
+			m.addAttribute("Submit", submitted);
+		}
+		m.addAttribute("rosEntity", rosEntity);
 		m.addAttribute("numOfQues", form.getListQuesAndAns().size());
 		return "user/quizzes/result";
 	}
