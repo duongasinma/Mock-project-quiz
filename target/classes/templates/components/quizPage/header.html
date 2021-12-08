@@ -21,7 +21,7 @@
 	          <a class="nav-link" href="/">Home</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" href="/score">Score Board</a>
+	          <a class="nav-link" th:href="@{/api/v1/user/quizzes/historyuser}">Score Board</a>
 	        </li>
 	        <li class="nav-item" th:if="${#request.userPrincipal == null}">
 	          <a class="nav-link" th:href="@{/api/v1/login}">Login</a>
